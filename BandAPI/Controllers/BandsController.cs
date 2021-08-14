@@ -1,9 +1,9 @@
-﻿using BandAPI.Services;
+﻿using BandAPI.Helpers;
+using BandAPI.Models;
+using BandAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BandAPI.Controllers
 {
@@ -19,11 +19,23 @@ namespace BandAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetBands()
+        public ActionResult<IEnumerable<BandDto>> GetBands()
         {
             var bandsFromRepo = _bandAlbumRepository.GetBands();
+            var bandsDto = new List<BandDto>();
 
-            return Ok(bandsFromRepo);
+            foreach (var band in bandsFromRepo)
+            {
+                bandsDto.Add(new BandDto()
+                {
+                    Id = band.Id,
+                    Name = band.Name,
+                    MainGenre = band.MainGenre,
+                    FoundedYearsAgo = $"{band.Founded.ToString("yyyy")} ({band.Founded.GetYearsAgo()} years ago)"
+                });
+            }
+
+            return Ok(bandsDto);
         }
 
         [HttpGet("{bandId}")]
