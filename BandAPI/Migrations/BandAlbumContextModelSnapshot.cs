@@ -54,7 +54,7 @@ namespace BandAPI.Migrations
                         new
                         {
                             Id = new Guid("16945b9e-cfb2-455a-b5e2-be67f05bf33f"),
-                            BandId = new Guid("a7c5fded-f96c-4e5e-b6ed-dffd74ce0e7c"),
+                            BandId = new Guid("2c2278a5-63ac-4be6-b3d7-2c52ca339e04"),
                             Description = "Amazing Rock album with raw sound",
                             Title = "Appetite for Destruction"
                         },

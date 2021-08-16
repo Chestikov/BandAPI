@@ -59,7 +59,7 @@ namespace BandAPI.Migrations
                 values: new object[,]
                 {
                     { new Guid("55c45c62-2be4-4764-bba3-c7d4b6fdc0fe"), new Guid("a7c5fded-f96c-4e5e-b6ed-dffd74ce0e7c"), "One pf the best heavy metal albuns ever", "Master Of Puppets" },
-                    { new Guid("16945b9e-cfb2-455a-b5e2-be67f05bf33f"), new Guid("a7c5fded-f96c-4e5e-b6ed-dffd74ce0e7c"), "Amazing Rock album with raw sound", "Appetite for Destruction" },
+                    { new Guid("16945b9e-cfb2-455a-b5e2-be67f05bf33f"), new Guid("2c2278a5-63ac-4be6-b3d7-2c52ca339e04"), "Amazing Rock album with raw sound", "Appetite for Destruction" },
                     { new Guid("9f999965-b620-4ac0-bdf7-d0a37b6b8b5f"), new Guid("c4160eb1-42af-4912-930f-0bc21fad3760"), "Very groovy albim", "Waterloo" },
                     { new Guid("509ecd4d-d3f3-40a8-8973-c00b4153d417"), new Guid("0276a268-33e5-4858-8589-4fa10ffbd5f9"), "Arguably one og the best albums by Oasis", "Be Here Now" },
                     { new Guid("e78d2f07-22e8-4cee-bcd5-c952a069ca8f"), new Guid("46ad6b44-d02c-4db6-8104-d0c73520bac6"), "Awesome Debut album by A-Ha", "Hunting Hight and Low" }

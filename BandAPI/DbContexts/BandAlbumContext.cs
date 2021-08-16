@@ -66,7 +66,7 @@ namespace BandAPI.DbContexts
                     Id = Guid.Parse("16945b9e-cfb2-455a-b5e2-be67f05bf33f"),
                     Title = "Appetite for Destruction",
                     Description = "Amazing Rock album with raw sound",
-                    BandId = Guid.Parse("a7c5fded-f96c-4e5e-b6ed-dffd74ce0e7c")
+                    BandId = Guid.Parse("2c2278a5-63ac-4be6-b3d7-2c52ca339e04")
                 },
                 new Album()
                 {
