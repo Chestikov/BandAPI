@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BandAPI.Helpers;
 using BandAPI.Models;
 using BandAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -22,9 +23,9 @@ namespace BandAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<BandDto>> GetBands()
+        public ActionResult<IEnumerable<BandDto>> GetBands([FromQuery] BandResourceParameters bandResourceParameters)
         {
-            var bandsFromRepo = _bandAlbumRepository.GetBands();
+            var bandsFromRepo = _bandAlbumRepository.GetBands(bandResourceParameters);
             // var bandsDto = new List<BandDto>();
 
             //foreach (var band in bandsFromRepo)
