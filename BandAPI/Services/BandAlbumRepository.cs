@@ -170,7 +170,7 @@ namespace BandAPI.Services
 
         public void UpdateAlbum(Album album)
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         public void UpdateBand(Band band)
