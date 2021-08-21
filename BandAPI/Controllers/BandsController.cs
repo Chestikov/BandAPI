@@ -42,7 +42,7 @@ namespace BandAPI.Controllers
             return Ok(_mapper.Map<IEnumerable<BandDto>>(bandsFromRepo));
         }
 
-        [HttpGet("{bandId}")]
+        [HttpGet("{bandId}", Name = "GetBand")] // Name, чтобы можно было вызвать из CreateBand в CreatedAtRoute()
         public IActionResult GetBand(Guid bandId)
         {
             var bandFronRepo = _bandAlbumRepository.GetBand(bandId);
@@ -53,6 +53,21 @@ namespace BandAPI.Controllers
             }
 
             return Ok(bandFronRepo);
+        }
+
+        [HttpPost]
+        public ActionResult<BandDto> CreateBand([FromBody] BandForCreatingDto band)
+        {
+            // Проверка, что на входе не null будет автоматом, поэтому не делаем
+            // А почему не проверяем, что json корректный?!
+
+            var bandEntity = _mapper.Map<Entities.Band>(band);
+            _bandAlbumRepository.AddBand(bandEntity);
+            _bandAlbumRepository.Save();
+
+            var bandToReturn = _mapper.Map<BandDto>(bandEntity);
+
+            return CreatedAtRoute("GetBand", new { bandId = bandToReturn.Id }, bandToReturn);
         }
     }
 }
