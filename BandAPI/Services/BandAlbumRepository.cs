@@ -134,17 +134,17 @@ namespace BandAPI.Services
                                                     .OrderBy(b => b.Name).ToList();
         }
 
-        public IEnumerable<Band> GetBands(BandResourceParameters bandResourceParameters)
+        public PagedList<Band> GetBands(BandResourceParameters bandResourceParameters)
         {
             if (bandResourceParameters == null)
             {
                 throw new ArgumentNullException(nameof(bandResourceParameters));
             }
 
-            if (string.IsNullOrWhiteSpace(bandResourceParameters.MainGenre) && string.IsNullOrWhiteSpace(bandResourceParameters.SearchQuery))
-            {
-                return GetBands();
-            }
+            //if (string.IsNullOrWhiteSpace(bandResourceParameters.MainGenre) && string.IsNullOrWhiteSpace(bandResourceParameters.SearchQuery))
+            //{
+            //    return GetBands();
+            //}
 
             var collection = _context.Bands as IQueryable<Band>;
 
@@ -160,7 +160,7 @@ namespace BandAPI.Services
                 collection = collection.Where(b => b.Name.Contains(searchQuery));   // Решили, что ищем по названию
             }
 
-            return collection.ToList();
+            return PagedList<Band>.Create(collection, bandResourceParameters.PageNumber, bandResourceParameters.PageSize);
         }
 
         public bool Save()
