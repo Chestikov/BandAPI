@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using BandAPI.Helpers;
 using BandAPI.Models;
 using BandAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace BandAPI.Controllers
 {
@@ -23,6 +23,26 @@ namespace BandAPI.Controllers
 
         }
 
+        [HttpGet("({ids})", Name = "GetBandCollection")]
+        public IActionResult GetBandCollection([FromRoute] [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
+        {
+            if (ids == null)
+            {
+                return BadRequest();
+            }
+
+            var bandEntities = _bandAlbumRepository.GetBands(ids);
+
+            if (ids.Count() != bandEntities.Count()) // Если не равно, то есть id, для которого не нашлось группы в БД, а значит, он кривой.
+            {
+                return NotFound();
+            }
+
+            var bandsToReturn = _mapper.Map<IEnumerable<BandDto>>(bandEntities);
+
+            return Ok(bandsToReturn);
+        }
+
         [HttpPost]
         public ActionResult<IEnumerable<BandDto>> CreateBandCollection([FromBody] IEnumerable<BandForCreatingDto> bandCollection)
         {
@@ -34,8 +54,10 @@ namespace BandAPI.Controllers
             }
 
             _bandAlbumRepository.Save();
+            var bandCollectionToReturn = _mapper.Map<IEnumerable<BandDto>>(bandEntities);
+            var idsString = string.Join(",", bandCollectionToReturn.Select(a => a.Id));
 
-            return Ok();
+            return CreatedAtRoute("GetBandCollection", new { ids = idsString }, bandCollectionToReturn);
         }
     }
 }
