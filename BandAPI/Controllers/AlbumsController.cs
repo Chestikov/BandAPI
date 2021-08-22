@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BandAPI.Models;
 using BandAPI.Services;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -85,6 +86,36 @@ namespace BandAPI.Controllers
 
             _mapper.Map(album, albumFromRepo); // Здесь уже изменяется albumFromRepo.
             _bandAlbumRepository.UpdateAlbum(albumFromRepo); // Здесь ничего не происходит, метод не реализован. Сделано для соответствия repository pattern.
+            _bandAlbumRepository.Save();
+
+            return NoContent();
+        }
+
+        [HttpPatch("{albumId}")]
+        public ActionResult PartiallyUpdateAlbumForBand(Guid bandId, Guid albumId, [FromBody] JsonPatchDocument<AlbumForUpdatingDto> patchDocument)
+        {
+            if (!_bandAlbumRepository.BandExists(bandId))
+            {
+                return NotFound();
+            }
+
+            var albumFromRepo = _bandAlbumRepository.GetAlbum(bandId, albumId);
+
+            if (albumFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            var albumToPath = _mapper.Map<AlbumForUpdatingDto>(albumFromRepo);
+            patchDocument.ApplyTo(albumToPath, ModelState);
+
+            if (!TryValidateModel(albumToPath))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(albumToPath, albumFromRepo);
+            _bandAlbumRepository.UpdateAlbum(albumFromRepo);
             _bandAlbumRepository.Save();
 
             return NoContent();
