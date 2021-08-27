@@ -35,5 +35,32 @@ namespace BandAPI.Services
 
             throw new Exception("No mapping was found");
         }
+
+        public bool ValidMappingExists<TSource, TDestination>(string fields)
+        {
+            var properrtyMapping = GetPropertyMapping<TSource, TDestination>();
+
+            if (string.IsNullOrWhiteSpace(fields))
+            {
+                return true;
+            }
+
+            var fieldsAfterSplit = fields.Split(",");
+
+            foreach (var field in fieldsAfterSplit)
+            {
+                var trimmedField = field.Trim();
+
+                var indexOfSpace = trimmedField.IndexOf(" ");
+                var propertyName = indexOfSpace == -1 ? trimmedField : trimmedField.Remove(indexOfSpace);
+
+                if (!properrtyMapping.ContainsKey(propertyName))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
     }
 }

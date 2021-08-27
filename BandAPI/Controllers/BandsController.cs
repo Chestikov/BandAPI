@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BandAPI.Entities;
 using BandAPI.Helpers;
 using BandAPI.Models;
 using BandAPI.Services;
@@ -15,18 +16,24 @@ namespace BandAPI.Controllers
     {
         private readonly IBandAlbumRepository _bandAlbumRepository;
         private readonly IMapper _mapper;
+        private readonly IPropertyMappingService _propertyMappingService;
 
-        public BandsController(IBandAlbumRepository bandAlbumRepository, IMapper mapper)
+        public BandsController(IBandAlbumRepository bandAlbumRepository, IMapper mapper, IPropertyMappingService propertyMappingService)
         {
             _bandAlbumRepository = bandAlbumRepository ?? throw new ArgumentNullException(nameof(bandAlbumRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-
+            _propertyMappingService = propertyMappingService ?? throw new ArgumentNullException(nameof(propertyMappingService));
         }
 
         [HttpHead]
         [HttpGet(Name = "GetBands")]
         public ActionResult<IEnumerable<BandDto>> GetBands([FromQuery] BandResourceParameters bandResourceParameters)
         {
+            if (!_propertyMappingService.ValidMappingExists<BandDto, Band>(bandResourceParameters.OrderBy))
+            {
+                return BadRequest();
+            }
+
             var bandsFromRepo = _bandAlbumRepository.GetBands(bandResourceParameters);
 
             var previuosPageLink = bandsFromRepo.HasPrevious ? CreateBandsUri(bandResourceParameters, UriType.PreviousPage) : null;
@@ -119,6 +126,7 @@ namespace BandAPI.Controllers
                 case UriType.PreviousPage:
                     return Url.Link("GetBands", new
                     {
+                        orderBy = bandResourceParameters.OrderBy,
                         pageNumber = bandResourceParameters.PageNumber - 1,
                         pageSize = bandResourceParameters.PageSize,
                         mainGenre = bandResourceParameters.MainGenre,
@@ -127,6 +135,7 @@ namespace BandAPI.Controllers
                 case UriType.NextPage:
                     return Url.Link("GetBands", new
                     {
+                        orderBy = bandResourceParameters.OrderBy,
                         pageNumber = bandResourceParameters.PageNumber + 1,
                         pageSize = bandResourceParameters.PageSize,
                         mainGenre = bandResourceParameters.MainGenre,
@@ -135,6 +144,7 @@ namespace BandAPI.Controllers
                 default:
                     return Url.Link("GetBands", new
                     {
+                        orderBy = bandResourceParameters.OrderBy,
                         pageNumber = bandResourceParameters.PageNumber,
                         pageSize = bandResourceParameters.PageSize,
                         mainGenre = bandResourceParameters.MainGenre,

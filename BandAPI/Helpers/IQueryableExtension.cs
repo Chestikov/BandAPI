@@ -32,7 +32,7 @@ namespace BandAPI.Helpers
             foreach (var orderByClause in orderBySplit)
             {
                 var trimmedOrderBy = orderByClause.Trim();
-                var orderDesc = trimmedOrderBy.EndsWith(" desc ");
+                var orderDesc = trimmedOrderBy.EndsWith(" desc");
                 var indexOfSpace = trimmedOrderBy.IndexOf(" ");
                 var propertyName = indexOfSpace == -1 ? trimmedOrderBy : trimmedOrderBy.Remove(indexOfSpace);
 
@@ -55,7 +55,7 @@ namespace BandAPI.Helpers
                         orderDesc = !orderDesc;
                     }
 
-                    orderByString = orderByString + (!string.IsNullOrWhiteSpace(orderByString) ? "," : "") + destination + (orderDesc ? " descending" : "ascending"); 
+                    orderByString = orderByString + (!string.IsNullOrWhiteSpace(orderByString) ? "," : "") + destination + (orderDesc ? " descending" : " ascending"); 
                 }
             }
 
