@@ -58,9 +58,9 @@ namespace BandAPI.Services
                 {
                     return false;
                 }
-
-                return true;
             }
+            
+            return true;
         }
     }
 }
