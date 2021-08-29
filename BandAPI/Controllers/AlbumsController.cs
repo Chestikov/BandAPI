@@ -22,7 +22,7 @@ namespace BandAPI.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetAlbumsForBand")]
         public ActionResult<IEnumerable<AlbumsDto>> GetAlbumsForBand(Guid bandId)
         {
             if (!_bandAlbumRepository.BandExists(bandId))
@@ -54,7 +54,7 @@ namespace BandAPI.Controllers
             return Ok(_mapper.Map<AlbumsDto>(albumFromRepo));
         }
 
-        [HttpPost]
+        [HttpPost(Name = "CreateAlbumForBand")]
         public ActionResult<AlbumsDto> CreateAlbumForBand(Guid bandId, [FromBody] AlbumForCreatingDto album)
         {
             if (!_bandAlbumRepository.BandExists(bandId))
